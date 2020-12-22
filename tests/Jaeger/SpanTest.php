@@ -25,7 +25,7 @@ class SpanTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->tracer = new Tracer('test-service', new NullReporter, new ConstSampler);
         $this->context = new SpanContext(0, 0,0, SAMPLED_FLAG);
@@ -34,7 +34,7 @@ class SpanTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->tracer = null;
         $this->context = null;
@@ -129,19 +129,19 @@ class SpanTest extends TestCase
 
         $this->assertCount(4, $logs);
 
-        $this->assertInternalType('integer', $logs[0]['timestamp']);
+        $this->assertIsInt($logs[0]['timestamp']);
         $this->assertEquals((int)($dateTime01->format('U.u')*1000000), $logs[0]['timestamp']);
         $this->assertSame($fields01, $logs[0]['fields']);
 
-        $this->assertInternalType('integer', $logs[1]['timestamp']);
+        $this->assertIsInt($logs[1]['timestamp']);
         $this->assertSame($dateTime02*1000000, $logs[1]['timestamp']);
         $this->assertSame($fields02, $logs[1]['fields']);
 
-        $this->assertInternalType('integer', $logs[2]['timestamp']);
+        $this->assertIsInt($logs[2]['timestamp']);
         $this->assertSame((int) ($dateTime03 * 1000000), $logs[2]['timestamp']);
         $this->assertSame($fields02, $logs[2]['fields']);
 
-        $this->assertInternalType('integer', $logs[3]['timestamp']);
+        $this->assertIsInt($logs[3]['timestamp']);
         $this->assertSame($fields02, $logs[3]['fields']);
     }
 

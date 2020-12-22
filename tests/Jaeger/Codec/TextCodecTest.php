@@ -15,7 +15,7 @@ class TextCodecTest extends TestCase
     /** @var TextCodec */
     private $textCodec;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->textCodec = new TextCodec();
     }

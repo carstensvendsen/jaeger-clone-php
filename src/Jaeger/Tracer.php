@@ -15,7 +15,7 @@ use OpenTracing\Tracer as OTTracer;
 use OpenTracing\SpanContext as OTSpanContext;
 use OpenTracing\Reference;
 use OpenTracing\StartSpanOptions;
-use OpenTracing\Exceptions\UnsupportedFormat;
+use OpenTracing\Exceptions\UnsupportedFormatException;
 use const OpenTracing\Formats\BINARY;
 use const OpenTracing\Formats\HTTP_HEADERS;
 use const OpenTracing\Formats\TEXT_MAP;
@@ -144,7 +144,7 @@ class Tracer implements OTTracer
     /**
      * {@inheritdoc}
      */
-    public function startSpan($operationName, $options = [])
+    public function startSpan(string $operationName, $options = []): Span
     {
         if (!($options instanceof StartSpanOptions)) {
             $options = StartSpanOptions::create($options);
@@ -220,15 +220,15 @@ class Tracer implements OTTracer
      * @param mixed $carrier
      * @return void
      *
-     * @throws UnsupportedFormat
+     * @throws UnsupportedFormatException
      */
-    public function inject(OTSpanContext $spanContext, $format, &$carrier)
+    public function inject(OTSpanContext $spanContext, string $format, &$carrier): void
     {
         if ($spanContext instanceof SpanContext) {
             $codec = $this->codecs[$format] ?? null;
 
             if ($codec == null) {
-                throw UnsupportedFormat::forFormat(is_scalar($format) ? $format : gettype($format));
+                throw UnsupportedFormatException::forFormat(is_scalar($format) ? $format : gettype($format));
             }
 
 
@@ -250,14 +250,14 @@ class Tracer implements OTTracer
      * @param mixed $carrier
      * @return SpanContext|null
      *
-     * @throws UnsupportedFormat
+     * @throws UnsupportedFormatException
      */
-    public function extract($format, $carrier)
+    public function extract(string $format, $carrier): ?SpanContext
     {
         $codec = $this->codecs[$format] ?? null;
 
         if ($codec == null) {
-            throw UnsupportedFormat::forFormat(is_scalar($format) ? $format : gettype($format));
+            throw UnsupportedFormatException::forFormat(is_scalar($format) ? $format : gettype($format));
         }
 
         try {
@@ -272,7 +272,7 @@ class Tracer implements OTTracer
     /**
      * {@inheritdoc}
      */
-    public function flush()
+    public function flush(): void
     {
         $this->sampler->close();
         $this->reporter->close();
@@ -286,7 +286,7 @@ class Tracer implements OTTracer
     /**
      * {@inheritdoc}
      */
-    public function getScopeManager()
+    public function getScopeManager(): ScopeManager
     {
         return $this->scopeManager;
     }
@@ -294,7 +294,7 @@ class Tracer implements OTTracer
     /**
      * {@inheritdoc}
      */
-    public function getActiveSpan()
+    public function getActiveSpan(): ?Span
     {
         $activeScope = $this->getScopeManager()->getActive();
         if ($activeScope === null) {
@@ -307,7 +307,7 @@ class Tracer implements OTTracer
     /**
      * {@inheritdoc}
      */
-    public function startActiveSpan($operationName, $options = [])
+    public function startActiveSpan(string $operationName, $options = []): Scope
     {
         if (!$options instanceof StartSpanOptions) {
             $options = StartSpanOptions::create($options);
