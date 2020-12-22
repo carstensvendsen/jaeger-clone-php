@@ -335,7 +335,7 @@ class Tracer implements OTTracer
         $references = $options->getReferences();
         foreach ($references as $ref) {
             if ($ref->isType(Reference::CHILD_OF)) {
-                return $ref->getContext();
+                return $ref->getSpanContext();
             }
         }
 
