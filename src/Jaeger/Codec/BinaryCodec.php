@@ -3,7 +3,7 @@
 namespace Jaeger\Codec;
 
 use Jaeger\SpanContext;
-use OpenTracing\Exceptions\UnsupportedFormatException;
+use OpenTracing\UnsupportedFormatException;
 
 class BinaryCodec implements CodecInterface
 {

@@ -15,7 +15,7 @@ use OpenTracing\Tracer as OTTracer;
 use OpenTracing\SpanContext as OTSpanContext;
 use OpenTracing\Reference;
 use OpenTracing\StartSpanOptions;
-use OpenTracing\Exceptions\UnsupportedFormatException;
+use OpenTracing\UnsupportedFormatException;
 use const OpenTracing\Formats\BINARY;
 use const OpenTracing\Formats\HTTP_HEADERS;
 use const OpenTracing\Formats\TEXT_MAP;
@@ -335,7 +335,7 @@ class Tracer implements OTTracer
         $references = $options->getReferences();
         foreach ($references as $ref) {
             if ($ref->isType(Reference::CHILD_OF)) {
-                return $ref->getContext();
+                return $ref->getSpanContext();
             }
         }
 

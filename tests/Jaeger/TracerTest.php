@@ -9,7 +9,7 @@ use Jaeger\ScopeManager;
 use Jaeger\Span;
 use Jaeger\SpanContext;
 use Jaeger\Tracer;
-use OpenTracing\Exceptions\UnsupportedFormatException;
+use OpenTracing\UnsupportedFormatException;
 use OpenTracing\NoopSpanContext;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
